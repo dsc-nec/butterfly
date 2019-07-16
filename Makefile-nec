@@ -1,0 +1,20 @@
+## ----------- start of compilation -----------
+CXX := nc++
+#CXXFLAGS := -DNEC -ftrace -fopenmp -O3 -I.
+CXXFLAGS := -DNEC -fopenmp -O3 -I.
+DEPS := $(wildcard *.hpp)
+Obj := butterfly.o
+
+all: butterfly-nec.bin
+
+%.o: %.cpp $(DEPS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
+butterfly-nec.bin: $(Obj)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
+clean:
+	rm *.o
+
+cleandist:
+	rm *.o butterfly-nec.bin
