@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
         // Load file
         cout << "Loading data \n";
         //auto A = make_crs_matrix_local_load<int,int>(path);
-        auto A = make_crs_matrix_local_loadbinary<int,int>(path);
+        auto A = make_crs_matrix_local_loadbinary<long,int>(path);
 
         cout << "Start calculation \n";
         auto start = chrono::high_resolution_clock::now();
@@ -29,7 +29,14 @@ int main(int argc, char* argv[])
         set_diag_zero(B);
         cout << "After setting diag zero...";
         // sum (x^2 - x)
-        auto sum = inner_product(B.val.begin(), B.val.end(), B.val.begin(), 0) - accumulate(B.val.begin(), B.val.end(), 0);
+        // auto sum = inner_product(B.val.begin(), B.val.end(), B.val.begin(), 0) - accumulate(B.val.begin(), B.val.end(), 0);
+        auto valb = B.val.data();
+        long sum = 0;
+        size_t size = B.val.size();
+        for(size_t i = 0; i < size; i++)
+        {
+                sum += valb[i]*valb[i] - valb[i];
+        }
         cout << "After inner_product...";
         cout << sum/4 << endl;
         auto finish = chrono::high_resolution_clock::now();
